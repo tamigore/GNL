@@ -6,7 +6,7 @@
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:30:35 by tamigore          #+#    #+#             */
-/*   Updated: 2018/11/26 13:58:09 by tamigore         ###   ########.fr       */
+/*   Updated: 2018/11/27 18:54:04 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 int		main(int ac, char **av)
 {
 	int		fd;
-	int 	i;
+	int 	i = 0;
 	int		err = 1;
-	char	**tab;
+	char	*line;
 
 	if (ac == 2)
 	{
@@ -26,11 +26,8 @@ int		main(int ac, char **av)
 			ft_putstr("open fail.\n");
 			return (0);
 		}
-		if (!(tab = (char **)malloc(sizeof(char *) * 8)))
-			return (-1);
-		while (err == 1)
+		while ((err = get_next_line(fd, &line)) == 1)
 		{
-			err = get_next_line(fd, tab);
 			if (err == -1)
 			{
 				ft_putstr("get next line fail.\n");
@@ -39,10 +36,11 @@ int		main(int ac, char **av)
 			i++;
 			ft_putnbr(err);
 			ft_putstr(" : err\n");
-			ft_puttab(tab);
-			ft_putstr(" : tab\n Passage numero ");
+			ft_putstr(line);
+			ft_putstr(" : line\n Passage numero ");
 			ft_putnbr(i);
 			ft_putstr("\n\n");
+			free(line);
 		}
 		close(fd);
 	}

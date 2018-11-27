@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/21 13:57:04 by tamigore          #+#    #+#             */
-/*   Updated: 2018/11/27 19:33:14 by tamigore         ###   ########.fr       */
+/*   Created: 2018/11/27 19:05:24 by tamigore          #+#    #+#             */
+/*   Updated: 2018/11/27 19:18:23 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "get_next_line.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include "libft.h"
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
+int		get_next_line(const int fd, char **line)
+{
+	static char		*str;
+	char			buf[BUFF_SIZE + 1];
+	int				i;
+	int				r;
 
-#define BUFF_SIZE 1000000
+	if (!line || !fd)
+		return (-1);
+	if (!(*line = ft_strnew(1)))
+		return (-1);
+	while (r = read(fd, buf, BUFF_SIZE))
+	{
+		buf[r] = '\0';
+		if (!(str = ft_strjoin(str, buf)))
+			return (-1);
+		if (ft_strchr(buf, '\n'))
+			break ;
+	}
 
-int		get_next_line(const int fd, char **line);
-
-#endif
+}
