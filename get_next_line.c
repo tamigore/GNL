@@ -6,52 +6,58 @@
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:14:16 by tamigore          #+#    #+#             */
-/*   Updated: 2018/11/21 19:26:46 by tamigore         ###   ########.fr       */
+/*   Updated: 2018/11/26 13:56:19 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strccat(char *cpy, char *str, char c)
+int		ft_strccpy(char **cpy, char *str, int nb, int i)
 {
-	int	i;
+	int n;
 	int j;
 
-	i = 0;
-	j = ft_strlen(cpy);
-	while (str[i])
+	j = 0;
+	n = nb;
+	while (str[nb])
 	{
-		if (str[i] == c)
+		if (str[nb] == '\n')
 			break ;
-		cpy[j++] = str[i++];
+		nb++;
 	}
-	cpy[j + 1] = '\0';
-	return (cpy);
+	if (!(cpy[i] = ft_strnew(nb - n)))
+		return (0);
+	while (str[n] && n < nb)
+		cpy[i][j++] = str[n++];
+	cpy[i][j] = '\0';
+	return (nb);
 }
 
 int		get_next_line(const int fd, char **line)
 {
+	char			*p;
+	int				r;
 	static int		i;
-	ssize_t			r;
-	char 			*str;
+	static int		nb;
+	char 			buf[BUFF_SIZE + 1];
 
-	if (!(str = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1))))
+	if (fd < 0 || line == NULL)
 		return (-1);
-	if (!(line[i] = (char *)ft_memalloc(sizeof(char) * (BUFF_SIZE + 1))))
+	if (!(p = ft_strnew(1)))
 		return (-1);
-	while (ft_strchr(str, '\n') == NULL)
+	while ((r = read(fd, buf, BUFF_SIZE)))
 	{
-		if ((r = read(fd, str, BUFF_SIZE)) < 0)
-		{
-			ft_putstr("read fail.\n");
-			return (-1);
-		}
-		str[r] = '\0';
-		ft_strccat(line[i], str, '\n');
+		buf[r] = '\0';
+		ft_putnbr(r);
+		ft_putstr(" : r\n");
+		p = ft_strjoin(p, buf);
 	}
-	line[++i] = NULL;
-	ft_puttab(line);
-	if (r != 42)
+	if (r < BUFF_SIZE && !ft_strlen(p))
 		return (0);
+	ft_putstr(p);
+	ft_putstr(" : p\n");
+	if (!(nb = ft_strccpy(line, p, nb, i)))
+		return (-1);
+	line[++i] = NULL;
 	return (1);
 }
