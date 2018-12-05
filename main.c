@@ -5,44 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/21 14:30:35 by tamigore          #+#    #+#             */
-/*   Updated: 2018/11/27 18:54:04 by tamigore         ###   ########.fr       */
+/*   Created: 2018/12/05 13:31:23 by tamigore          #+#    #+#             */
+/*   Updated: 2018/12/05 14:56:15 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		main(int ac, char **av)
+int		main(void)
 {
-	int		fd;
-	int 	i = 0;
-	int		err = 1;
 	char	*line;
+	int		fd;
+	int		i;
 
-	if (ac == 2)
+	i = 0;
+	if ((fd = open("42file", O_RDONLY)) == -1)
 	{
-		if ((fd = open(av[1], O_RDONLY)) < 0)
-		{
-			ft_putstr("open fail.\n");
-			return (0);
-		}
-		while ((err = get_next_line(fd, &line)) == 1)
-		{
-			if (err == -1)
-			{
-				ft_putstr("get next line fail.\n");
-				return (0);
-			}
-			i++;
-			ft_putnbr(err);
-			ft_putstr(" : err\n");
-			ft_putstr(line);
-			ft_putstr(" : line\n Passage numero ");
-			ft_putnbr(i);
-			ft_putstr("\n\n");
-			free(line);
-		}
-		close(fd);
+		ft_putstr("open fail\n");
+		return (0);
+	}
+	while (get_next_line(fd, &line) > 0)
+	{
+		ft_putstr("passage numero ");
+		ft_putnbr(i++);
+		ft_putstr(" :\nligne : ");
+		ft_putstr(line);
+		ft_putchar('\n');
+		free(line);
 	}
 	return (0);
 }

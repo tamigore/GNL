@@ -6,7 +6,7 @@
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 13:57:04 by tamigore          #+#    #+#             */
-/*   Updated: 2018/11/27 19:33:14 by tamigore         ###   ########.fr       */
+/*   Updated: 2018/11/28 17:26:04 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
-#define BUFF_SIZE 1000000
+# define BUFF_SIZE 42
 
 int		get_next_line(const int fd, char **line);
 

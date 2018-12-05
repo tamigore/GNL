@@ -6,11 +6,12 @@
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 14:14:16 by tamigore          #+#    #+#             */
-/*   Updated: 2018/11/27 19:52:48 by tamigore         ###   ########.fr       */
+/*   Updated: 2018/12/05 14:56:12 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 static t_list	*ft_file(t_list **file, int fd)
 {
@@ -29,10 +30,26 @@ static t_list	*ft_file(t_list **file, int fd)
 	return (tmp);
 }
 
-static	int		ft_strccpy(char **content, char *str)
+static char		*ft_strnjoin(char *s1, char *s2, int r)
 {
-	int i;
-	int j;
+	char	*join;
+	int		diff;
+	char	*tmp;
+
+	tmp = s1;
+	diff = ft_strlen(s2) - r;
+	if (!s1 || !s2 || !(join = ft_strnew(ft_strlen(s1) + ft_strlen(s2) - diff)))
+		return (NULL);
+	ft_strcat(join, s1);
+	ft_strncat(join, s2, r);
+	free(tmp);
+	return (join);
+}
+
+static int		ft_strcncat(char **content, char *str)
+{
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -42,10 +59,20 @@ static	int		ft_strccpy(char **content, char *str)
 			break ;
 		i++;
 	}
-	if (!(*content = ft_strnew(i)))
+	if (!(*content = ft_strnew(i + 1)))
 		return (0);
 	ft_strncat(*content, str, i);
 	return (i);
+}
+
+static char		*ft_free(char *content, int r)
+{
+	char	*tmp;
+
+	tmp = content;
+	content = ft_strdup(content + r);
+	free(tmp);
+	return (content);
 }
 
 int				get_next_line(const int fd, char **line)
@@ -54,30 +81,24 @@ int				get_next_line(const int fd, char **line)
 	t_list			*list;
 	int				r;
 	int				i;
-	char 			buf[BUFF_SIZE + 1];
+	char			buf[BUFF_SIZE + 1];
 
-	if (fd < 0 || line == NULL)
+	if (fd < 0 || line == NULL || read(fd, buf, 0) == -1)
 		return (-1);
 	list = ft_file(&file, fd);
-	if (!(*line = ft_strnew(1)))
-		return (-1);
-	while ((r = read(fd, buf, BUFF_SIZE)))
+	while ((r = read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[r] = '\0';
-		ft_putnbr(r);
-		ft_putstr(" : r\n");
-		if (!(list->content = ft_strjoin(list->content, buf)))
+		if (!(list->content = ft_strnjoin(list->content, buf, r)))
 			return (-1);
 		if (ft_strchr(buf, '\n'))
 			break ;
 	}
 	if (r < BUFF_SIZE && !ft_strlen(list->content))
 		return (0);
-	ft_putstr(list->content);
-	ft_putstr(" : list content\n");
-	i = ft_strccpy(line, list->content);
+	i = ft_strcncat(line, list->content);
 	if (i < (int)ft_strlen(list->content))
-		list->content += (i + 1);
+		list->content = ft_free(list->content, i + 1);
 	else
 		ft_strclr(list->content);
 	return (1);
