@@ -6,7 +6,7 @@
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 13:57:04 by tamigore          #+#    #+#             */
-/*   Updated: 2018/11/28 17:26:04 by tamigore         ###   ########.fr       */
+/*   Updated: 2019/11/19 12:31:17 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,22 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include "libft.h"
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 
-# define BUFF_SIZE 42
+int				get_next_line(int fd, char **line);
+char			*ft_strdup(char *src);
+int				ft_strlen(char *s);
+char			*ft_strncat(char *s1, char *s2, size_t n);
+char			*ft_strnew(size_t size);
+char			*ft_strchr(char *s, int c);
 
-int		get_next_line(const int fd, char **line);
+typedef	struct	s_list
+{
+	void			*content;
+	int				fd;
+	struct s_list	*next;
+}				t_list;
 
 #endif
