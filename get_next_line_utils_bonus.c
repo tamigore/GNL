@@ -6,22 +6,11 @@
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 15:20:31 by tamigore          #+#    #+#             */
-/*   Updated: 2019/11/19 11:50:41 by tamigore         ###   ########.fr       */
+/*   Updated: 2019/11/22 14:43:36 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	ft_strclr(char *s)
-{
-	int i;
-
-	i = 0;
-	if (!s)
-		return ;
-	while (s[i])
-		s[i++] = '\0';
-}
 
 char	*ft_strdup(char *src)
 {

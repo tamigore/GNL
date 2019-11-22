@@ -19,11 +19,6 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 
-# define TRUE		1
-# define SUCCESS	0
-# define FAILURE	-1
-
-
 int				get_next_line(int fd, char **line);
 char			*ft_strdup(char *src);
 int				ft_strlen(char *s);

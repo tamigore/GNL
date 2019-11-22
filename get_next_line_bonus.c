@@ -63,12 +63,12 @@ static int		ft_strcncat(char **content, char *str)
 		i++;
 	}
 	if (!(*content = ft_strnew(i + 1)))
-		return (FAILURE);
+		return (-1);
 	ft_strncat(*content, str, i);
 	return (i);
 }
 
-static char		*ft_free(char *content, int r)
+static char		*ft_free(char *content, int r, char *buf)
 {
 	char	*tmp;
 
@@ -76,6 +76,7 @@ static char		*ft_free(char *content, int r)
 	if (!(content = ft_strdup(content + r)))
 		return (NULL);
 	free(tmp);
+	free(buf);
 	return (content);
 }
 
@@ -87,29 +88,21 @@ int				get_next_line(int fd, char **line)
 	int				i;
 	char			*buf;
 
-	if (fd < 0 || !line || !(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))) ||
-		read(fd, buf, 0) == -1 || !(list = ft_file(&file, fd)))
-		return (FAILURE);
+	if (fd < 0 || !(buf = (char*)malloc(sizeof(char) * (BUFFER_SIZE + 1)))
+		|| read(fd, buf, 0) == -1 || !(list = ft_file(&file, fd)) || !line)
+		return (-1);
 	while ((r = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[r] = '\0';
 		if (!(list->content = ft_strnjoin(list->content, buf, r)))
-			return (FAILURE);
+			return (-1);
 		if (ft_strchr(buf, '\n'))
-		{
-			free(buf);
 			break ;
-		}
 	}
 	if ((i = ft_strcncat(line, list->content)) == -1)
-		return (FAILURE);
-	if (r < BUFFER_SIZE && !(ft_strchr(list->content, '\n')))
-	{
-		if (!(list->content = ft_free(list->content, ft_strlen(list->content))))
-			return (FAILURE);
-		return (SUCCESS);
-	}
-	if (!(list->content = ft_free(list->content, i + 1)))
-		return (FAILURE);
-	return (TRUE);
+		return (-1);
+	r = (r < BUFFER_SIZE && !(ft_strchr(list->content, '\n'))) ? 0 : 1;
+	if (!(list->content = ft_free(list->content, i + 1, buf)))
+		return (-1);
+	return (r);
 }
