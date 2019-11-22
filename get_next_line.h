@@ -6,7 +6,7 @@
 /*   By: tamigore <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 13:57:04 by tamigore          #+#    #+#             */
-/*   Updated: 2019/11/19 12:31:17 by tamigore         ###   ########.fr       */
+/*   Updated: 2019/11/21 17:56:27 by tamigore         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+
+# define TRUE		1
+# define SUCCESS	0
+# define FAILURE	-1
+
 
 int				get_next_line(int fd, char **line);
 char			*ft_strdup(char *src);
